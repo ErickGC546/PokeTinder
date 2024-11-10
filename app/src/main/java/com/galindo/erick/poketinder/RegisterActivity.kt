@@ -1,50 +1,57 @@
 package com.galindo.erick.poketinder
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.galindo.erick.poketinder.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var edtEmail: EditText
-    private lateinit var edtPassword: EditText
-    private lateinit var edtPassword2: EditText
-    private lateinit var btnRegister: Button
-    private val registerViewModel = RegisterViewModel(SharedPreferencesRepository())
+    private lateinit var binding: ActivityRegisterBinding
+    private lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        edtEmail = findViewById(R.id.edtEmail)
-        edtPassword = findViewById(R.id.edtPassword)
-        edtPassword2 = findViewById(R.id.edtPassword2)
-        btnRegister = findViewById(R.id.btnRegister)
+        registerViewModel = RegisterViewModel(this)
 
-        findViewById<FloatingActionButton>(R.id.btnBackClose).setOnClickListener {
+        observeValues()
+
+        binding.btnBackClose.setOnClickListener {
             finish()
         }
 
-        btnRegister.setOnClickListener {
-            val email = edtEmail.text.toString().trim()
-            val password = edtPassword.text.toString()
-            val confirmPassword = edtPassword2.text.toString()
+        binding.btnRegister.setOnClickListener {
+            val email = binding.edtEmail.text.toString().trim()
+            val password = binding.edtPassword.text.toString()
+            val confirmPassword = binding.edtPassword2.text.toString()
 
-            val error = registerViewModel.registerUser(this, email, password, confirmPassword)
-            if (error != null) {
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                Log.e("RegisterActivity", "Error de registro: $error")
-            } else {
-                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                Log.i("RegisterActivity", "Usuario registrado con éxito")
-                finish()
+            registerViewModel.registerUser(email, password, confirmPassword)
+        }
+    }
+
+    private fun observeValues() {
+        registerViewModel.emailError.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        registerViewModel.passwordError.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        registerViewModel.registerSuccess.observe(this) {
+            Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
+        registerViewModel.registerError.observe(this) {
+            Toast.makeText(this, "Hubo un problema al guardar los datos de usuario", Toast.LENGTH_SHORT).show()
         }
     }
 }

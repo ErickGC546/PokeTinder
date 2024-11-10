@@ -1,32 +1,52 @@
 package com.galindo.erick.poketinder
 
 import android.content.Context
-import android.util.Log
 import android.util.Patterns
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class RegisterViewModel(private val sharedPreferencesRepository: SharedPreferencesRepository) : ViewModel() {
+class RegisterViewModel(
+    val context: Context
+) : ViewModel() {
 
-    fun registerUser(context: Context, email: String, password: String, confirmPassword: String): String? {
-        // Validación del correo electrónico
-        if (email.isEmpty()) return "Es necesario poner tu correo electrónico"
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) return "Ingrese un correo electrónico válido"
+    val emailError = MutableLiveData<String?>()
+    val passwordError = MutableLiveData<String?>()
+    val registerSuccess = MutableLiveData<Boolean>()
+    val registerError = MutableLiveData<Boolean>()
 
-        // Validación de la contraseña
-        if (password.isEmpty() || password.length < 8) return "La contraseña debe tener al menos 8 caracteres"
-        if (password != confirmPassword) return "Las contraseñas no coinciden"
-
-        // Inicialización de SharedPreferences
-        try {
-            sharedPreferencesRepository.setSharedPreference(context)
-            sharedPreferencesRepository.saveUserEmail(email)
-            sharedPreferencesRepository.saveUserPassword(password)
-            Log.i("RegisterViewModel", "Registro exitoso: datos guardados en SharedPreferences")
-        } catch (e: Exception) {
-            Log.e("RegisterViewModel", "Error al guardar los datos de usuario: ${e.message}")
-            return "Hubo un problema al guardar los datos de usuario"
+    private var sharedPreferencesRepository: SharedPreferencesRepository =
+        SharedPreferencesRepository().also {
+            it.setSharedPreference(context)
         }
 
-        return null // Registro exitoso, sin errores
+    fun registerUser(email: String, password: String, confirmPassword: String) {
+        if (!validateInputs(email, password, confirmPassword)) return
+
+        sharedPreferencesRepository.saveUserEmail(email)
+        sharedPreferencesRepository.saveUserPassword(password)
+        registerSuccess.postValue(true)
+    }
+
+    private fun validateInputs(email: String, password: String, confirmPassword: String): Boolean {
+        if (email.isEmpty()) {
+            emailError.postValue("Es necesario poner tu correo electrónico")
+            return false
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailError.postValue("Ingrese un correo electrónico válido")
+            return false
+        }
+        if (password.isEmpty() || password.length < 8) {
+            passwordError.postValue("La contraseña debe tener al menos 8 caracteres")
+            return false
+        }
+        if (password != confirmPassword) {
+            passwordError.postValue("Las contraseñas no coinciden")
+            return false
+        }
+
+        emailError.postValue(null)
+        passwordError.postValue(null)
+        return true
     }
 }
