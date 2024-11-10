@@ -37,7 +37,7 @@ class RegisterViewModel(
             return false
         }
         if (password.isEmpty() || password.length < 8) {
-            passwordError.postValue("La contraseña debe tener al menos 8 caracteres")
+            passwordError.postValue("La contraseña debe tener como minimo 8 caracteres")
             return false
         }
         if (password != confirmPassword) {
