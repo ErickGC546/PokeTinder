@@ -1,4 +1,4 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.ui.view
 
 import android.content.Intent
 import android.os.Bundle

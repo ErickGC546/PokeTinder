@@ -1,5 +1,6 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.data.network
 
+import com.galindo.erick.poketinder.data.model.PokemonListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

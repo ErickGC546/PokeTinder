@@ -1,9 +1,10 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.ui.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.galindo.erick.poketinder.ui.viewmodel.LoginViewModel
 import com.galindo.erick.poketinder.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

@@ -1,9 +1,10 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.galindo.erick.poketinder.data.model.PokemonResponse
 import com.galindo.erick.poketinder.databinding.ItemPokemonBinding
 
 class PokemonAdapter(

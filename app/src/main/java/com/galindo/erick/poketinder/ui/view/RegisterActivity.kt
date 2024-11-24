@@ -1,8 +1,9 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.ui.view
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.galindo.erick.poketinder.ui.viewmodel.RegisterViewModel
 import com.galindo.erick.poketinder.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.data.database
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log

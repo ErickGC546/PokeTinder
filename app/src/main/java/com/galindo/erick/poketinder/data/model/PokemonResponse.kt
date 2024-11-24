@@ -1,4 +1,4 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.data.model
 
 data class PokemonResponse(
     val name: String,

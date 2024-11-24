@@ -1,9 +1,10 @@
-package com.galindo.erick.poketinder
+package com.galindo.erick.poketinder.ui.viewmodel
 
 import android.content.Context
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.galindo.erick.poketinder.data.database.SharedPreferencesRepository
 
 class RegisterViewModel(
     val context: Context
