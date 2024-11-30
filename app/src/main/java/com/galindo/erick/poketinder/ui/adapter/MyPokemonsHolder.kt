@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.galindo.erick.poketinder.data.database.entities.MyPokemonEntity
 import com.galindo.erick.poketinder.databinding.ItemPokemonSavedBinding
 
+
 class MyPokemonsHolder(view: View): RecyclerView.ViewHolder(view) {
 
     private val binding = ItemPokemonSavedBinding.bind(view)

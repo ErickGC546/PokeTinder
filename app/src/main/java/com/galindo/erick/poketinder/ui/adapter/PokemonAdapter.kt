@@ -1,4 +1,5 @@
 package com.galindo.erick.poketinder.ui.adapter
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,3 +38,4 @@ class PokemonAdapter(
     override fun getItemCount(): Int = list.size
 
 }
+

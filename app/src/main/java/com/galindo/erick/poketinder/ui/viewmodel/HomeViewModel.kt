@@ -1,11 +1,12 @@
 package com.galindo.erick.poketinder.ui.viewmodel
-import PokemonDatabase
+
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.galindo.erick.poketinder.data.database.entities.MyPokemonEntity
+import com.galindo.erick.poketinder.data.database.entities.PokemonDatabase
 import com.galindo.erick.poketinder.data.model.PokemonResponse
 import com.galindo.erick.poketinder.data.network.PokemonApi
 import kotlinx.coroutines.CoroutineScope
