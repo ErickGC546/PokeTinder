@@ -1,9 +1,13 @@
 package com.galindo.erick.poketinder.ui.viewmodel
-
+import PokemonDatabase
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.galindo.erick.poketinder.data.network.PokemonApi
+import androidx.lifecycle.viewModelScope
+import androidx.room.Room
+import com.galindo.erick.poketinder.data.database.entities.MyPokemonEntity
 import com.galindo.erick.poketinder.data.model.PokemonResponse
+import com.galindo.erick.poketinder.data.network.PokemonApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +21,8 @@ class HomeViewModel: ViewModel() {
     val isLoading = MutableLiveData<Boolean>()
 
     val errorApi = MutableLiveData<String>()
+
+    private val POKEMON_DATABASE_NAME = "pokemon_database"
 
     init {
         getAllPokemons()
@@ -40,6 +46,24 @@ class HomeViewModel: ViewModel() {
         }
     }
 
+    fun savePokemon(pokemonResponse: PokemonResponse, context: Context) {
+        val myPokemon = MyPokemonEntity(
+            name = pokemonResponse.name,
+            image = pokemonResponse.getPokemonImage(),
+            idPokemon = pokemonResponse.getPokemonId()
+        )
+
+        viewModelScope.launch {
+            getRoomDatabase(context).getPokemonDao().insert(myPokemon)
+        }
+    }
+
+    private fun getRoomDatabase(context: Context) = Room.databaseBuilder(
+        context,
+        PokemonDatabase::class.java,
+        POKEMON_DATABASE_NAME
+    ).build()
+
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://pokeapi.co")
@@ -47,3 +71,4 @@ class HomeViewModel: ViewModel() {
             .build()
     }
 }
+

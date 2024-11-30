@@ -1,5 +1,4 @@
 package com.galindo.erick.poketinder.ui.view
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +10,11 @@ import com.galindo.erick.poketinder.data.model.PokemonResponse
 import com.galindo.erick.poketinder.databinding.FragmentHomeBinding
 import com.galindo.erick.poketinder.ui.adapter.PokemonAdapter
 import com.galindo.erick.poketinder.ui.viewmodel.HomeViewModel
+import com.yuyakaido.android.cardstackview.CardStackLayoutManager
+import com.yuyakaido.android.cardstackview.CardStackListener
+import com.yuyakaido.android.cardstackview.Direction
 
-
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CardStackListener {
 
     private var listPokemon: List<PokemonResponse> = emptyList()
 
@@ -23,11 +24,13 @@ class HomeFragment : Fragment() {
 
     private val viewModel by lazy { HomeViewModel() }
 
+    private val manager by lazy { CardStackLayoutManager(context, this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentHomeBinding.inflate(layoutInflater)
-        binding.rvTinderPokemon.adapter = adapter
         observeValues()
+        initializeTinderCard()
     }
 
     override fun onCreateView(
@@ -35,6 +38,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return binding.root
+    }
+
+    private fun initializeTinderCard() {
+        binding.rvTinderPokemon.adapter = adapter
+        binding.rvTinderPokemon.layoutManager = manager
     }
 
     private fun observeValues() {
@@ -56,5 +64,31 @@ class HomeFragment : Fragment() {
         activity?.runOnUiThread {
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+
+    }
+
+    override fun onCardSwiped(direction: Direction?) {
+        if (direction == Direction.Right) {
+            val pokemon = adapter.list[manager.topPosition - 1]
+            viewModel.savePokemon(pokemon, requireContext())
+        }
+    }
+
+    override fun onCardRewound() {
+
+    }
+
+    override fun onCardCanceled() {
+
+    }
+
+    override fun onCardAppeared(view: View?, position: Int) {
+
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
     }
 }

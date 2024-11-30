@@ -1,23 +1,47 @@
 package com.galindo.erick.poketinder.ui.view
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.galindo.erick.poketinder.R
+import androidx.fragment.app.viewModels
+import com.galindo.erick.poketinder.data.database.entities.MyPokemonEntity
+import com.galindo.erick.poketinder.databinding.FragmentFavoriteBinding
+import com.galindo.erick.poketinder.ui.adapter.MyPokemonsAdapater
+import com.galindo.erick.poketinder.ui.viewmodel.FavoriteViewModel
 
 
 class FavoriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
+
+    private lateinit var binding: FragmentFavoriteBinding
+
+    private var listMyPokemon = mutableListOf<MyPokemonEntity>()
+
+    private val adapter by lazy { MyPokemonsAdapater(listMyPokemon) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.rvPokemons.adapter = adapter
+
+        favoriteViewModel.getMyPokemons(requireContext())
+
+        favoriteViewModel.myPokemonList.observe(this) {
+            listMyPokemon.addAll(it)
+        }
+
+        binding.floatingActionDelete.setOnClickListener {
+            favoriteViewModel.deleteAllPokemon(requireContext())
+        }
     }
 }
